@@ -1,0 +1,22 @@
+{
+  "name": "gql-boilerplate",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "worksapces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "git-format-staged": "^2.1.0",
+    "husky": "^2.3.0",
+    "prettier": "^1.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format:staged"
+    }
+  },
+  "scripts": {
+    "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts'"
+  }
+}
