@@ -17,6 +17,7 @@
     }
   },
   "scripts": {
+    "server": "cd packages/server && yarn",
     "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts'"
   }
 }
