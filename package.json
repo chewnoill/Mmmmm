@@ -18,6 +18,7 @@
   },
   "scripts": {
     "docs": "cd packages/docs && yarn",
+    "shared": "cd packages/shared && yarn",
     "server": "cd packages/server && yarn",
     "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts'"
   }
