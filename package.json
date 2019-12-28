@@ -17,6 +17,7 @@
     }
   },
   "scripts": {
+    "client": "cd packages/client && yarn",
     "docs": "cd packages/docs && yarn",
     "shared": "cd packages/shared && yarn",
     "server": "cd packages/server && yarn",
