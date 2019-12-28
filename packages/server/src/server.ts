@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   CLIENT_BASE_URL,
   SERVER_PORT,
