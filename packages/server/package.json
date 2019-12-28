@@ -13,6 +13,7 @@
     "@types/hapi__hapi": "^18.2.5",
     "apollo-server": "^2.6.7",
     "apollo-server-hapi": "^2.6.7",
+    "document-module": "1.0.0",
     "dotenv": "^8.1.0",
     "graphql": "14.5.4",
     "graphql-tag": "^2.10.1",
