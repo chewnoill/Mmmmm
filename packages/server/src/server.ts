@@ -30,8 +30,10 @@ async function StartServer() {
     playground: true,
     context: ({ request, h, ...rest }) =>
       context({
-        req: request,
-        resp: h,
+        session: {
+          req: request,
+          resp: h
+        },
         ...rest
       })
   });
@@ -40,6 +42,7 @@ async function StartServer() {
     app: app as any,
     path: `/${SERVER_GRAPHQL_ENDPOINT}`,
     cors: {
+      origin: [CLIENT_BASE_URL],
       credentials: true
     }
   });
