@@ -2,6 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "license": "MIT",
+  "main": "src/app.ts",
   "scripts": {
     "start": "ts-node-dev -r tsconfig-paths/register src/server.ts"
   },
@@ -22,5 +23,8 @@
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.8.0",
     "typescript": "^3.5.2"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.4"
   }
 }

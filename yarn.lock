@@ -1073,6 +1073,13 @@
     "@graphql-toolkit/schema-merging" "0.7.4"
     tslib "1.10.0"
 
+"@graphql-codegen/fragment-matcher@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/fragment-matcher/-/fragment-matcher-1.9.1.tgz#f0738e559c925d43a2123767f0d3a255abebda9b"
+  integrity sha512-aaJRCQFv61pDcAX1VzFeWcKApx+OwZYVwLBBjVEmw6mj+5ZRqHhp86dKn0jI17KwOeBmoasFZFDb6/2Tuid0qA==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.9.1"
+
 "@graphql-codegen/plugin-helpers@1.9.1":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.9.1.tgz#2be98ca17d71c7395508a8f3880bd1e5cb3e206b"
@@ -1091,6 +1098,15 @@
   dependencies:
     "@graphql-codegen/plugin-helpers" "1.9.1"
     "@graphql-codegen/typescript" "1.9.1"
+    "@graphql-codegen/visitor-plugin-common" "1.9.1"
+    tslib "1.10.0"
+
+"@graphql-codegen/typescript-react-apollo@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-1.9.1.tgz#87c5a0c5b6c69cc380d4f36d70d592d44744a953"
+  integrity sha512-Drn3fhw3P93r3OxdrZiVofl5GLT2mQ4VhB0kk1Sd4NFq8zvbtgdksfZoDyoLgElLjI/iNJmdseFZZdGlp2TeGw==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.9.1"
     "@graphql-codegen/visitor-plugin-common" "1.9.1"
     tslib "1.10.0"
 
@@ -2278,6 +2294,13 @@
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.5.2.tgz#503aacfe5cc2703d5484326b1b27efa67a339c1f"
   integrity sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/node-fetch@^2.5.4":
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.4.tgz#5245b6d8841fc3a6208b82291119bc11c4e0ce44"
+  integrity sha512-Oz6id++2qAOFuOlE1j0ouk1dzl3mmI1+qINPNBhi9nt/gVOz0G+13Ao6qjhdF0Ys+eOkhu6JnFmt38bR3H0POQ==
   dependencies:
     "@types/node" "*"
 

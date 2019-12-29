@@ -1,0 +1,25 @@
+overwrite: true
+schema: "http://localhost:4000/graphql"
+require:
+  - tsconfig-paths/register
+  - ts-node/register/transpile-only
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-resolvers"
+
+    config:
+      contextType: "@graphql-modules/core#ModuleContext"
+  src/generated/react-graphql.tsx:
+    documents: "queries/**/*.graphql"
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHooks: true
+  src/generated/introspection.ts:
+    plugins:
+      - "fragment-matcher"

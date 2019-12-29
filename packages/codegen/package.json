@@ -1,0 +1,20 @@
+{
+  "name": "codegen",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "codegen": "graphql-codegen --config codegen.yml",
+    "prebuild": "yarn codegen",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.9.1",
+    "@graphql-codegen/fragment-matcher": "^1.9.1",
+    "@graphql-codegen/typescript": "^1.9.1",
+    "@graphql-codegen/typescript-react-apollo": "^1.9.1",
+    "@types/node-fetch": "^2.5.4",
+    "server": "1.0.0"
+  }
+}
