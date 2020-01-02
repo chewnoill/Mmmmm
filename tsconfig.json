@@ -4,13 +4,10 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./build",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
-    "strictPropertyInitialization": false,
-    "declaration": true
+    "strictPropertyInitialization": false
   }
 }

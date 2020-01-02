@@ -11,6 +11,8 @@
     "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
     "strictPropertyInitialization": false,
-    "declaration": true
+    "declaration": true,
+    "allowJs": true,
+    "jsx": "react"
   }
 }

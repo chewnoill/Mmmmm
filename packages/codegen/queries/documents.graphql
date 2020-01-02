@@ -1,0 +1,18 @@
+query getDocument($id: ID!) {
+  document {
+    document(id: $id) {
+      id
+      contents
+    }
+  }
+}
+
+mutation updateDocument($id: ID!, $change: AutoMergeChange!) {
+  documents {
+    update(input: { id: $id, change: $change })
+  }
+}
+
+subscription subscribeDocument($id: ID!) {
+  document(id: $id)
+}
