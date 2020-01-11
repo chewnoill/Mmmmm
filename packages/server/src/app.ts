@@ -7,6 +7,49 @@ export const App = new GraphQLModule({
   typeDefs: gql`
     type Query {
       status: String
+      user: UserQuery
+      document: DocumentsQuery
+    }
+
+    type UserQuery {
+      me: User
+    }
+
+    type User {
+      id: ID!
+      email: String!
+      name: String!
+      documents: [Document]
+    }
+
+    type Document {
+      id: ID!
+      contents: String!
+      history: [DocumentHistory]!
+    }
+
+    type DocumentHistory {
+      item: [HistoryItem]
+    }
+
+    type HistoryItem {
+      stuff: String
+    }
+
+    type DocumentsQuery {
+      document: Document
+    }
+
+    type Mutation {
+      documents: DocumentsMutation
+    }
+
+    type DocumentsMutation {
+      update(history: HistoryInput): String
+    }
+
+    input HistoryInput {
+      change: [String]
     }
   `,
   resolvers: {
