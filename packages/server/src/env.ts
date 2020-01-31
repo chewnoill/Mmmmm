@@ -7,3 +7,4 @@ export const SERVER_PORT = process.env.PORT!;
 export const SERVER_BASE = process.env.SERVER_BASE!;
 export const SERVER_GRAPHQL_ENDPOINT = process.env.SERVER_GRAPHQL_ENDPOINT!;
 export const SERVER_BASE_URL = `${SERVER_BASE}:${SERVER_PORT}`;
+export const DATABASE_URL = process.env.DATABASE_URL!;
