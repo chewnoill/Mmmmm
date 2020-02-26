@@ -1,0 +1,23 @@
+query getLoginUrl {
+  auth {
+    login_url
+  }
+}
+
+query me {
+  auth {
+    me {
+      user {
+        email
+      }
+    }
+  }
+}
+
+mutation login($code: String!) {
+  auth {
+    login(code: $code) {
+      authToken
+    }
+  }
+}
