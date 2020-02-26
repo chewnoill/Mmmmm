@@ -2,13 +2,31 @@ import React from "react";
 import { ApolloProvider } from "react-apollo";
 import { useApolloClient } from "utils/apollo-client";
 import Document from "components/document";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "pages/login";
+import OAuthConsumer from "pages/oauth-consumer";
+import Main from "pages/main";
+import { useLocalStorage } from "hooks/use-local-storage";
 
 const App: React.FC = () => {
-  const client = useApolloClient();
+  const [auth] = useLocalStorage();
+  const client = useApolloClient(auth || undefined);
   if (!client) return null;
   return (
     <ApolloProvider client={client}>
-      <Document id="1" />
+      <Router>
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/oauth_consumer">
+            <OAuthConsumer />
+          </Route>
+          <Route path="/">
+            <Main />
+          </Route>
+        </Switch>
+      </Router>
     </ApolloProvider>
   );
 };
