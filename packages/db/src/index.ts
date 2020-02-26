@@ -14,6 +14,7 @@ const DatabaseModule = new GraphQLModule<
     gql`
       type User {
         id: ID!
+        email: String!
         collections: [Collection!]!
       }
       type Collection {

@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+  Column,
+  Index,
+  BaseEntity
+} from "typeorm";
 import { Collection } from "./collection";
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import * as DataLoader from "dataloader";
@@ -6,9 +15,16 @@ import { getConnection, Connection } from "../typeorm";
 import { mapIds } from "../utils";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @Index({ unique: true })
+  @Column()
+  email: string;
+
+  @Column({ nullable: true })
+  refresh_token: string;
 
   @ManyToMany(
     type => Collection,
@@ -16,6 +32,11 @@ export class User {
   )
   @JoinTable()
   collections: Collection[];
+
+  setRefreshToken(token: string) {
+    this.refresh_token = token;
+    return this.save();
+  }
 }
 
 @Injectable({ scope: ProviderScope.Session })
@@ -49,6 +70,15 @@ export class UserProvider {
 
   getUser(id: string) {
     return this.userLoader.load(id);
+  }
+
+  getUserByEmail(email: string) {
+    return this.connection.manager
+      .createQueryBuilder()
+      .select("user")
+      .from(User, "user")
+      .where("user.email = :email", { email })
+      .getOne();
   }
 
   createUser() {
