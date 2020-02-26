@@ -5,6 +5,10 @@ import { CollectionProvider } from "./entities/collection";
 import { ThingProvider } from "./entities/thing";
 import { setupConnection } from "./typeorm";
 
+export * from "./entities/collection";
+export * from "./entities/thing";
+export * from "./entities/user";
+
 const DatabaseModule = new GraphQLModule<
   { DB_URL: string },
   any,
