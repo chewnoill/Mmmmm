@@ -6,7 +6,11 @@ import { User } from "./entities/user";
 
 type Props = { url: string } & { [key: string]: any };
 
+let setup = false;
+
 export const setupConnection = async (props: Props) => {
+  if (setup) return;
+  setup = true;
   return await createConnection({
     type: "postgres",
     entities: [Collection, Thing, User],

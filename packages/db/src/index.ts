@@ -10,10 +10,18 @@ export * from "./entities/thing";
 export * from "./entities/user";
 
 const DatabaseModule = new GraphQLModule<
-  { DB_URL: string },
+  { DB_URL?: string },
   any,
   ModuleContext
 >({
+  imports: ({ config }) => {
+    if (!config || !config.DB_URL) return [];
+    setupConnection({
+      url: config.DB_URL
+    });
+
+    return [];
+  },
   typeDefs: [
     gql`
       type User {
@@ -89,12 +97,7 @@ const DatabaseModule = new GraphQLModule<
           )
     }
   },
-  providers: ({ config: { DB_URL } }) => {
-    setupConnection({
-      url: DB_URL
-    });
-    return [UserProvider, CollectionProvider, ThingProvider];
-  }
+  providers: [UserProvider, CollectionProvider, ThingProvider]
 });
 
 export default DatabaseModule;
