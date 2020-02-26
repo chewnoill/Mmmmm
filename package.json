@@ -23,6 +23,7 @@
     "docs": "cd packages/docs && yarn",
     "shared": "cd packages/shared && yarn",
     "server": "cd packages/server && yarn",
+    "auth": "cd packages/auth-module && yarn",
     "document-module": "cd packages/document-module && yarn",
     "format:fix": "prettier '**/*.{ts,tsx,json}' --write",
     "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts' '*.tsx' '*.graphql'"
