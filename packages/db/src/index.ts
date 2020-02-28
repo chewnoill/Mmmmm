@@ -31,6 +31,7 @@ const DatabaseModule = new GraphQLModule<
       }
       type Collection {
         id: ID!
+        name: String!
         things: [Thing!]!
       }
       type Thing {
@@ -50,8 +51,12 @@ const DatabaseModule = new GraphQLModule<
       type UserMutations {
         create: User
       }
+      input CreateCollectionsInput {
+        userId: ID!
+        name: String!
+      }
       type CollectionMutations {
-        create(userId: ID!): Collection
+        create(input: CreateCollectionsInput!): Collection
       }
       type ThingMutations {
         create(collectionId: ID!): Thing
@@ -83,10 +88,13 @@ const DatabaseModule = new GraphQLModule<
         injector.get(UserProvider).createUser()
     },
     CollectionMutations: {
-      create: async (_, { userId }, { injector }) =>
+      create: async (_, { userId, name }, { injector }) =>
         injector
           .get(CollectionProvider)
-          .createCollection(await injector.get(UserProvider).getUser(userId))
+          .createCollection(
+            await injector.get(UserProvider).getUser(userId),
+            name
+          )
     },
     ThingMutations: {
       create: async (_, { collectionId }, { injector }) =>

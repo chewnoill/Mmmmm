@@ -3,7 +3,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   OneToMany,
-  JoinTable
+  JoinTable,
+  Column
 } from "typeorm";
 import { User, UserProvider } from "./user";
 import { Thing } from "./thing";
@@ -16,6 +17,9 @@ import { mapIds } from "../utils";
 export class Collection {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @Column()
+  name: string;
 
   @ManyToMany(
     type => User,
@@ -70,8 +74,9 @@ export class CollectionProvider {
     return this.collectionThingLoader.load(id);
   }
 
-  async createCollection(user: User) {
+  async createCollection(user: User, name: string) {
     const collection = new Collection();
+    collection.name = name;
     collection.users = [user];
     return this.connection.manager.save(collection);
   }
