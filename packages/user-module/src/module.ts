@@ -18,6 +18,10 @@ const Module = new GraphQLModule({
       me: Me! @auth
     }
 
+    type Thing {
+      s3url: String
+    }
+
     type Mutation {
       me: MeMutations
     }
@@ -46,6 +50,10 @@ const Module = new GraphQLModule({
     },
     Mutation: {
       me: () => ({})
+    },
+    Thing: {
+      s3url: (thing: Thing, _, { injector }) =>
+        injector.get(AWSProvider).getPresignedGet(`${thing.id}:${thing.value}`)
     },
     MeMutations: {
       createCollection: async (_, { input: { name } }, { injector }) =>
