@@ -4,6 +4,7 @@ import DocumentModule from "document-module";
 import DatabaseModule from "db";
 import AuthModule from "auth-module";
 import AWSModule from "aws-module";
+import UserModule from "user-module";
 import {
   DATABASE_URL,
   AWS_USER,
@@ -27,7 +28,8 @@ export const App = new GraphQLModule({
       googleAuthId: GOOGLE_AUTH_ID,
       googleAuthSecret: GOOGLE_AUTH_SECRET,
       googleAuthCallback: GOOGLE_AUTH_CALLBACK
-    })
+    }),
+    UserModule
   ],
   typeDefs: gql`
     type Query {
