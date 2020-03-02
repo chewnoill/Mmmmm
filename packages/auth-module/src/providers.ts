@@ -31,6 +31,11 @@ export class GoogleProvider {
     return this.userProvider.getUser(auth);
   }
 
+  authorizeSession() {
+    if (!this._user) throw Error("unauthorized");
+    return this._user;
+  }
+
   getUser() {
     return this._user;
   }

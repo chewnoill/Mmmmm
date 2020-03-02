@@ -9,6 +9,10 @@ const resolvers: Resolvers = {
       user: injector.get(GoogleProvider).getUser()
     })
   },
+  Me: {
+    user: (_, __, { injector }) =>
+      injector.get(GoogleProvider).authorizeSession()
+  },
   AuthMutation: {
     login: (_, { code }, { injector }) =>
       injector.get(GoogleProvider).authorize(code)
