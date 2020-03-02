@@ -18,6 +18,10 @@ const Module = new GraphQLModule({
       me: Me! @auth
     }
 
+    type Me {
+      collection(id: ID!): Collection
+    }
+
     type Thing {
       s3url: String
     }
@@ -50,6 +54,10 @@ const Module = new GraphQLModule({
     },
     Mutation: {
       me: () => ({})
+    },
+    Me: {
+      collection: (_, { id }, { injector }) =>
+        injector.get(CollectionProvider).getCollection(id)
     },
     Thing: {
       s3url: (thing: Thing, _, { injector }) =>
