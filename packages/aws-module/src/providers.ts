@@ -16,6 +16,14 @@ export class AWSProvider {
     config.update({ accessKeyId, secretAccessKey });
   }
 
+  getPresignedGet(key: string) {
+    return s3.getSignedUrl("getObject", {
+      Bucket: this.bucketName,
+      Expires: 60,
+      Key: key
+    });
+  }
+
   getPresignedPost(key: string) {
     return s3.createPresignedPost({
       Bucket: this.bucketName,
