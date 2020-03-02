@@ -36,6 +36,7 @@ const DatabaseModule = new GraphQLModule<
       }
       type Thing {
         id: ID!
+        value: String!
       }
       type Mutation {
         users: UserMutations!

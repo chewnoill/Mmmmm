@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinTable,
+  Column
+} from "typeorm";
 import { Collection, CollectionProvider } from "./collection";
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import * as DataLoader from "dataloader";
@@ -9,6 +15,9 @@ import { mapIds } from "../utils";
 export class Thing {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @Column()
+  value: string;
 
   @ManyToOne(
     type => Collection,
@@ -42,9 +51,10 @@ export class ThingProvider {
     return this.thingLoader.loadMany(ids);
   }
 
-  createThing(collection: Collection) {
+  createThing(collection: Collection, value: string) {
     const thing = new Thing();
     thing.collection = collection;
+    thing.value = value;
     return this.connection.manager.save(thing);
   }
 }
