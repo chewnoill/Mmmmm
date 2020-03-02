@@ -15,6 +15,7 @@
     "apollo-server": "^2.6.7",
     "apollo-server-hapi": "^2.6.7",
     "auth-module": "1.0.0",
+    "aws-module": "1.0.0",
     "db": "1.0.0",
     "document-module": "1.0.0",
     "dotenv": "^8.1.0",
