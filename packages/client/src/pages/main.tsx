@@ -1,10 +1,18 @@
 import React from "react";
-import { useMeQuery } from "codegen";
+import { useGetMyProfileQuery } from "codegen";
+import DropZone from "components/drop-zone";
+import { Link } from "react-router-dom";
 
 export default () => {
-  const { data } = useMeQuery();
-  if (!data || !data.auth || !data.auth.me || !data.auth.me.user)
-    return <div>loading...</div>;
+  const { data } = useGetMyProfileQuery();
+  if (!data || !data.me || !data.me.user) return <div>loading...</div>;
 
-  return <div>hello {data.auth.me.user.email}</div>;
+  return (
+    <div>
+      <div>hello {data.me.user.email}</div>
+      {data.me.user.collections.map(({ id, name }) => (
+        <Link to={`/collection/${id}`}>{name}</Link>
+      ))}
+    </div>
+  );
 };
