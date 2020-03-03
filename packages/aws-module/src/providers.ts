@@ -1,23 +1,22 @@
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import { ModuleSessionInfo } from "@graphql-modules/core";
 import { Config } from "./types";
-import { S3, config } from "aws-sdk";
-import { v4 as uuidV4 } from "uuid";
-
-const s3 = new S3();
+import { S3, Config as AwsConfig } from "aws-sdk";
 
 @Injectable({ scope: ProviderScope.Application })
 export class AWSProvider {
   private bucketName: string;
+  private s3: S3;
   onInit({
     config: { accessKeyId, secretAccessKey, bucketName }
   }: ModuleSessionInfo<Config>) {
     this.bucketName = bucketName;
-    config.update({ accessKeyId, secretAccessKey });
+    const config = new AwsConfig({ accessKeyId, secretAccessKey });
+    this.s3 = new S3(config);
   }
 
   getPresignedGet(key: string) {
-    return s3.getSignedUrl("getObject", {
+    return this.s3.getSignedUrl("getObject", {
       Bucket: this.bucketName,
       Expires: 60,
       Key: key
@@ -25,7 +24,7 @@ export class AWSProvider {
   }
 
   getPresignedPost(key: string) {
-    return s3.createPresignedPost({
+    return this.s3.createPresignedPost({
       Bucket: this.bucketName,
       Expires: 60,
       Fields: { key },
