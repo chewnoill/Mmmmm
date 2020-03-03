@@ -1,0 +1,47 @@
+query getMyProfile {
+  me {
+    user {
+      id
+      email
+      collections {
+        id
+        name
+      }
+    }
+  }
+}
+
+query getMyCollection($collectionId: ID!) {
+  me {
+    collection(id: $collectionId) {
+      id
+      name
+      things {
+        id
+        value
+        s3url
+      }
+    }
+  }
+}
+
+mutation createCollection($name: String!) {
+  me {
+    createCollection(name: $name)
+  }
+}
+mutation createThing($collectionId: ID!, $name: String!) {
+  me {
+    collection(id: $collectionId) {
+      createThing(name: $name) {
+        thing {
+          id
+        }
+        createPresignedPost {
+          url
+          fields
+        }
+      }
+    }
+  }
+}
