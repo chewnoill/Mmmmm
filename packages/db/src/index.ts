@@ -4,6 +4,7 @@ import { UserProvider } from "./entities/user";
 import { CollectionProvider } from "./entities/collection";
 import { ThingProvider } from "./entities/thing";
 import { setupConnection } from "./typeorm";
+import { PaginationModule } from "./paginator";
 
 export * from "./entities/collection";
 export * from "./entities/thing";
@@ -15,24 +16,22 @@ const DatabaseModule = new GraphQLModule<
   ModuleContext
 >({
   imports: ({ config }) => {
-    if (!config || !config.DB_URL) return [];
+    if (!config || !config.DB_URL) return [PaginationModule];
     setupConnection({
       url: config.DB_URL
     });
 
-    return [];
+    return [PaginationModule];
   },
   typeDefs: [
     gql`
       type User {
         id: ID!
         email: String!
-        collections: [Collection!]!
       }
       type Collection {
         id: ID!
         name: String!
-        things: [Thing!]!
       }
       type Thing {
         id: ID!
@@ -42,12 +41,25 @@ const DatabaseModule = new GraphQLModule<
   ],
   resolvers: {
     User: {
-      collections: ({ id }, _, { injector }) =>
-        injector.get(UserProvider).getCollections(id)
+      email: ({ id }, _, { injector }) =>
+        injector
+          .get(UserProvider)
+          .getUser(id)
+          .then(c => c.email)
     },
     Collection: {
-      things: ({ id }, _, { injector }) =>
-        injector.get(CollectionProvider).getThings(id)
+      name: ({ id }, _, { injector }) =>
+        injector
+          .get(CollectionProvider)
+          .getCollection(id)
+          .then(c => c.name)
+    },
+    Thing: {
+      value: ({ id }, _, { injector }) =>
+        injector
+          .get(ThingProvider)
+          .getThing(id)
+          .then(c => c.value)
     }
   },
   providers: [UserProvider, CollectionProvider, ThingProvider]
