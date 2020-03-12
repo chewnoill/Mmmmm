@@ -1,14 +1,13 @@
 import { GraphQLModule, ModuleContext } from "@graphql-modules/core";
 import gql from "graphql-tag";
-import { UserProvider } from "./entities/user";
-import { CollectionProvider } from "./entities/collection";
-import { ThingProvider } from "./entities/thing";
+import { UserProvider, CollectionProvider, ThingProvider } from "./providers";
 import { setupConnection } from "./typeorm";
 import { PaginationModule } from "./paginator";
 
+export * from "./entities/user";
 export * from "./entities/collection";
 export * from "./entities/thing";
-export * from "./entities/user";
+export * from "./providers";
 
 const DatabaseModule = new GraphQLModule<
   { DB_URL?: string },
