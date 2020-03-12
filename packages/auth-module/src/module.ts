@@ -1,7 +1,6 @@
 import { GraphQLModule, ModuleContext } from "@graphql-modules/core";
 import DatabaseModule from "db";
 import gql from "graphql-tag";
-import resolvers from "./resolvers";
 import { GoogleProvider } from "./providers";
 import { Config, Context } from "./types";
 import { AuthenticatedDirective } from "./directive";
@@ -48,7 +47,21 @@ const AuthModule = new GraphQLModule<Config, Session, ModuleContext<Context>>({
     Mutation: {
       auth: () => ({})
     },
-    ...resolvers
+    AuthQuery: {
+      login_url: (_, __, { injector }) =>
+        injector.get(GoogleProvider).getAuthURL(),
+      me: (_, __, { injector }) => ({
+        user: injector.get(GoogleProvider).getUser()
+      })
+    },
+    Me: {
+      user: (_, __, { injector }) =>
+        injector.get(GoogleProvider).authorizeSession()
+    },
+    AuthMutation: {
+      login: (_, { code }, { injector }) =>
+        injector.get(GoogleProvider).authorize(code)
+    }
   },
   schemaDirectives: { auth: AuthenticatedDirective },
   providers: [GoogleProvider],
