@@ -66,7 +66,7 @@ const Module = new GraphQLModule({
     },
     Thing: {
       s3url: (thing: Thing, _, { injector }) =>
-        injector.get(AWSProvider).getPresignedGet(`${thing.id}:${thing.value}`)
+        injector.get(AWSProvider).getPresignedGet(thing.id)
     },
     MeMutations: {
       createCollection: async (_, { input: { name } }, { injector }) =>
@@ -86,7 +86,7 @@ const Module = new GraphQLModule({
     CreateThingResponse: {
       thing: (thing: Thing) => thing,
       createPresignedPost: (thing: Thing, _, { injector }) =>
-        injector.get(AWSProvider).getPresignedPost(`${thing.id}:${thing.value}`)
+        injector.get(AWSProvider).getPresignedPost(thing.id)
     },
     ...resolvers
   }
