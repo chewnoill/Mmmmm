@@ -56,6 +56,17 @@ export class UserProvider {
   getCollections(id: string) {
     return this.userCollectionLoader.load(id);
   }
+
+  getUserCollection(userId: string, collectionId: string) {
+    return this.connection.manager
+      .createQueryBuilder()
+      .select("collection")
+      .from(Collection, "collection")
+      .where("collection.id = :collectionId", { collectionId })
+      .andWhere("user.id = :userId", { userId })
+      .leftJoin("collection.users", "user")
+      .getOne();
+  }
 }
 @Injectable({ scope: ProviderScope.Session })
 export class CollectionProvider {

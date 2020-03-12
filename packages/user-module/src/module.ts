@@ -57,7 +57,12 @@ const Module = new GraphQLModule({
     },
     Me: {
       collection: (_, { id }, { injector }) =>
-        injector.get(CollectionProvider).getCollection(id)
+        injector
+          .get(UserProvider)
+          .getUserCollection(
+            injector.get(GoogleProvider).authorizeSession().id,
+            id
+          )
     },
     Thing: {
       s3url: (thing: Thing, _, { injector }) =>
