@@ -4,8 +4,12 @@ query getMyProfile {
       id
       email
       collections {
-        id
-        name
+        edges {
+          edge {
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -16,10 +20,19 @@ query getMyCollection($collectionId: ID!) {
     collection(id: $collectionId) {
       id
       name
-      things {
-        id
-        value
-        s3url
+      things(args: { first: 100 }) {
+        edges {
+          edge {
+            id
+            value
+            s3url
+          }
+          cursor
+        }
+        pageInfo {
+          hasPreviousPage
+          hasNextPage
+        }
       }
     }
   }
@@ -27,7 +40,9 @@ query getMyCollection($collectionId: ID!) {
 
 mutation createCollection($name: String!) {
   me {
-    createCollection(name: $name)
+    createCollection(input: { name: $name }) {
+      id
+    }
   }
 }
 mutation createThing($collectionId: ID!, $name: String!) {

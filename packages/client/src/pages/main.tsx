@@ -10,7 +10,7 @@ export default () => {
   return (
     <div>
       <div>hello {data.me.user.email}</div>
-      {data.me.user.collections.map(({ id, name }) => (
+      {data.me.user.collections.edges.map(({ edge: { id, name } }) => (
         <Link to={`/collection/${id}`}>{name}</Link>
       ))}
     </div>
