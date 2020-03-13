@@ -1,0 +1,30 @@
+{
+  "name": "aws-module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.9.1",
+    "@graphql-codegen/core": "^1.9.1",
+    "@graphql-codegen/typescript": "^1.9.1",
+    "@graphql-codegen/typescript-operations": "^1.9.1",
+    "@graphql-codegen/typescript-resolvers": "^1.9.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "dependencies": {
+    "@graphql-modules/core": "^0.7.10",
+    "@types/graphql-type-json": "^0.3.2",
+    "@types/uuid": "^7.0.0",
+    "apollo-server": "^2.9.15",
+    "auth-module": "1.0.0",
+    "aws-sdk": "^2.613.0",
+    "graphql": "14.5.4",
+    "graphql-tag": "^2.10.1",
+    "graphql-type-json": "^0.3.1",
+    "typescript": "^3.5.2",
+    "uuid": "^7.0.1"
+  },
+  "scripts": {
+    "codegen": "graphql-codegen --config codegen.yml"
+  }
+}
