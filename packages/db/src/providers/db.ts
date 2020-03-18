@@ -1,5 +1,5 @@
 import { User } from "../entities/user";
-import { Thing } from "../entities/thing";
+import { Thing, ThingType } from "../entities/thing";
 import { Collection } from "../entities/collection";
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import * as DataLoader from "dataloader";
@@ -9,8 +9,8 @@ import { mapIds } from "../utils";
 @Injectable({ scope: ProviderScope.Session })
 export class UserProvider {
   connection: Connection;
-  userLoader: DataLoader<string, User>;
-  userCollectionLoader: DataLoader<string, Collection[]>;
+  userLoader: DataLoader<string, User | undefined>;
+  userCollectionLoader: DataLoader<string, Collection[] | undefined>;
   constructor() {
     this.connection = getConnection();
     this.userLoader = new DataLoader(ids =>
@@ -31,12 +31,14 @@ export class UserProvider {
         .leftJoinAndSelect("user.collections", "collection")
         .getMany()
         .then(mapIds(ids))
-        .then(users => users.map(user => user.collections))
+        .then(users => users.map(user => user && user.collections))
     );
   }
 
   getUser(id: string) {
-    return this.userLoader.load(id);
+    const user = this.userLoader.load(id);
+    if (!user) throw Error("user not found");
+    return user;
   }
 
   getUserByEmail(email: string) {
@@ -67,18 +69,13 @@ export class UserProvider {
       .leftJoin("collection.users", "user")
       .getOne();
   }
-  getUserCollectionThing(
-    userId: string,
-    collectionId: string,
-    thingId: string
-  ) {
+  getUserCollectionThing(userId: string, thingId: string) {
     return this.connection.manager
       .createQueryBuilder()
       .select("thing")
       .from(Thing, "thing")
       .where("thing.id = :thingId", { thingId })
       .andWhere("user.id = :userId", { userId })
-      .andWhere("collection.id = :collectionId", { collectionId })
       .leftJoin("thing.collection", "collection")
       .leftJoin("collection.users", "user")
       .getOne();
@@ -87,8 +84,8 @@ export class UserProvider {
 @Injectable({ scope: ProviderScope.Session })
 export class CollectionProvider {
   connection: Connection;
-  collectionLoader: DataLoader<string, Collection>;
-  collectionThingLoader: DataLoader<string, Thing[]>;
+  collectionLoader: DataLoader<string, Collection | undefined>;
+  collectionThingLoader: DataLoader<string, Thing[] | undefined>;
   constructor() {
     this.connection = getConnection();
     this.collectionLoader = new DataLoader(ids =>
@@ -109,7 +106,9 @@ export class CollectionProvider {
         .leftJoinAndSelect("collection.things", "thing")
         .getMany()
         .then(mapIds(ids))
-        .then(collections => collections.map(collection => collection.things))
+        .then(collections =>
+          collections.map(collection => collection && collection.things)
+        )
     );
   }
 
@@ -135,7 +134,7 @@ export class CollectionProvider {
 @Injectable({ scope: ProviderScope.Session })
 export class ThingProvider {
   connection: Connection;
-  thingLoader: DataLoader<string, Thing>;
+  thingLoader: DataLoader<string, Thing | undefined>;
   constructor() {
     this.connection = getConnection();
     this.thingLoader = new DataLoader(ids =>
@@ -150,16 +149,27 @@ export class ThingProvider {
   }
 
   getThing(id: string) {
-    return this.thingLoader.load(id);
+    const thing = this.thingLoader.load(id);
+
+    if (!thing) throw Error("not found");
+    return thing;
   }
 
   getThings(ids: string[]) {
     return this.thingLoader.loadMany(ids);
   }
 
-  createThing(collection: Collection, value: string) {
+  createThing(collection: Collection, value: string, type: ThingType) {
     const thing = new Thing();
     thing.collection = collection;
+    thing.type = type;
+    thing.value = value;
+    return this.connection.manager.save(thing);
+  }
+
+  async updateThing(id: string, value: string) {
+    const thing = await this.getThing(id);
+    if (!thing) throw Error("not found");
     thing.value = value;
     return this.connection.manager.save(thing);
   }

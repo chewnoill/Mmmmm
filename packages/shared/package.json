@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/hapi__boom": "^9.0.1",
     "@types/jest": "^24.0.24",
     "automerge": "^0.12.1",
     "fast-diff": "^1.2.0",

@@ -23,9 +23,7 @@ query getMyCollection($collectionId: ID!) {
       things(args: { first: 100 }) {
         edges {
           edge {
-            id
-            value
-            s3url
+            ...ThingFragment
           }
           cursor
         }
@@ -38,6 +36,14 @@ query getMyCollection($collectionId: ID!) {
   }
 }
 
+query getMyThing($thingId: ID!) {
+  me {
+    thing(id: $thingId) {
+      ...ThingFragment
+    }
+  }
+}
+
 mutation createCollection($name: String!) {
   me {
     createCollection(input: { name: $name }) {
@@ -45,18 +51,46 @@ mutation createCollection($name: String!) {
     }
   }
 }
-mutation createThing($collectionId: ID!, $name: String!) {
+mutation createThing($collectionId: ID!, $value: String!) {
   me {
     collection(id: $collectionId) {
-      createThing(name: $name) {
-        thing {
-          id
-        }
-        createPresignedPost {
+      createThing(value: $value) {
+        ...ThingFragment
+      }
+    }
+  }
+}
+
+mutation uploadFileToCollection($collectionId: ID!) {
+  me {
+    collection(id: $collectionId) {
+      uploadFile {
+        presignedPost {
           url
           fields
         }
+        id
       }
     }
+  }
+}
+
+mutation updateThing($collectionId: ID!, $thingId: ID!, $value: String!) {
+  me {
+    collection(id: $collectionId) {
+      updateThing(args: { id: $thingId, value: $value }) {
+        ...ThingFragment
+      }
+    }
+  }
+}
+
+fragment ThingFragment on Thing {
+  id
+  ... on TextThing {
+    value
+  }
+  ... on ImageThing {
+    s3url
   }
 }

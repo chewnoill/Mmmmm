@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { UserProvider, CollectionProvider, ThingProvider } from "./providers";
 import { setupConnection } from "./typeorm";
 import { PaginationModule } from "./paginator";
+import { ThingType } from "./entities/thing";
 
 export * from "./entities/user";
 export * from "./entities/collection";
@@ -32,9 +33,15 @@ const DatabaseModule = new GraphQLModule<
         id: ID!
         name: String!
       }
-      type Thing {
+      interface Thing {
+        id: ID!
+      }
+      type TextThing implements Thing {
         id: ID!
         value: String!
+      }
+      type ImageThing implements Thing {
+        id: ID!
       }
     `
   ],
@@ -44,21 +51,36 @@ const DatabaseModule = new GraphQLModule<
         injector
           .get(UserProvider)
           .getUser(id)
-          .then(c => c.email)
+          .then(c => c && c.email)
     },
     Collection: {
       name: ({ id }, _, { injector }) =>
         injector
           .get(CollectionProvider)
           .getCollection(id)
-          .then(c => c.name)
+          .then(c => c && c.name)
     },
     Thing: {
+      __resolveType: async (
+        { id }: { id: string },
+        { injector }: { injector: any }
+      ) => {
+        const thing = await injector.get(ThingProvider).getThing(id);
+        switch (thing.type) {
+          case ThingType.IMAGE_LINK:
+            return "ImageThing";
+          case ThingType.TEXT:
+          default:
+            return "TextThing";
+        }
+      }
+    },
+    TextThing: {
       value: ({ id }, _, { injector }) =>
         injector
           .get(ThingProvider)
           .getThing(id)
-          .then(c => c.value)
+          .then(c => c && c.value)
     }
   },
   providers: [UserProvider, CollectionProvider, ThingProvider]

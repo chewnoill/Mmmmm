@@ -16,5 +16,8 @@
     "@graphql-codegen/typescript-react-apollo": "^1.9.1",
     "@types/node-fetch": "^2.5.4",
     "server": "1.0.0"
+  },
+  "dependencies": {
+    "@types/hapi__boom": "^9.0.1"
   }
 }

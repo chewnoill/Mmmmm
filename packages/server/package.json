@@ -11,7 +11,7 @@
     "@hapi/hapi": "^18.4.0",
     "@types/dotenv": "^6.1.1",
     "@types/graphql": "^14.5.0",
-    "@types/hapi__hapi": "^18.2.5",
+    "@types/hapi": "^18.0.3",
     "apollo-server": "^2.6.7",
     "apollo-server-hapi": "^2.6.7",
     "auth-module": "1.0.0",

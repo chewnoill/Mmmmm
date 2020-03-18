@@ -1,35 +1,36 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { useCreateThingMutation } from "codegen";
+import styled from "@emotion/styled";
+import {
+  useUploadFileToCollectionMutation,
+  useUpdateThingMutation
+} from "codegen";
 import { uploadFileToS3 } from "utils/upload-s3";
+import UploadOverlay from "components/upload-overlay";
 
 const DropZone = ({
   children,
-  collectionId
+  collectionId,
+  callback
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   collectionId: string;
+  callback: (id: string) => void;
 }) => {
-  const [mutate] = useCreateThingMutation();
+  const [getPresignedPost] = useUploadFileToCollectionMutation();
+  const [updateThing] = useUpdateThingMutation();
   const onDrop = useCallback(acceptedFiles => {
     const file = acceptedFiles[0];
-    mutate({
+    getPresignedPost({
       variables: {
-        collectionId,
-        name: file.name
+        collectionId
       }
     }).then(({ data }) => {
-      if (
-        !data ||
-        !data.me ||
-        !data.me.collection ||
-        !data.me.collection.createThing
-      )
-        return;
+      if (!data?.me?.collection?.uploadFile) return;
       const {
-        url,
-        fields
-      } = data.me.collection.createThing.createPresignedPost;
+        presignedPost: { url, fields },
+        id
+      } = data.me.collection.uploadFile;
       uploadFileToS3(
         {
           url,
@@ -40,16 +41,25 @@ const DropZone = ({
           }
         },
         acceptedFiles[0]
-      );
+      ).then(({ data }) => {
+        callback(id);
+      });
     });
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true
+  });
+
+  const open = isDragActive;
+  console.log({ isDragActive });
 
   return (
-    <div {...getRootProps()} style={{ height: "100%", width: "100%" }}>
+    <div {...getRootProps()}>
+      {open && <UploadOverlay />}
       <input {...getInputProps()} />
-      {isDragActive && <p>Drop the files here ...</p>}
       {children}
     </div>
   );

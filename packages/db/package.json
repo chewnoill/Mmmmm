@@ -29,6 +29,7 @@
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
     "typeorm": "ts-node -r tsconfig-paths/register ../../node_modules/typeorm/cli.js",
-    "migrate": "ts-node -r tsconfig-paths/register src/run-migrations.ts"
+    "migrate": "ts-node -r tsconfig-paths/register src/run-migrations.ts",
+    "test": "ts-node -r tsconfig-paths/register src/run-test.ts"
   }
 }

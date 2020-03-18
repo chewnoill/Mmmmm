@@ -39,7 +39,7 @@ export const paginate = async <T>(
   query: SelectQueryBuilder<T>,
   args?: PageArgs | null
 ): Promise<Connection<T>> => {
-  const take = args && args.first ? args.first : 10;
+  const take = args && args.first ? args.first : 100;
   const cursorData = args && args.after && decodeCursor(args.after);
   const skip = (cursorData && cursorData.skip) || 0;
   const edgeItems: T[] = await query
