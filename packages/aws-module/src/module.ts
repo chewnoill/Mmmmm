@@ -6,7 +6,6 @@ import { Config } from "./types";
 import { GraphQLJSONObject } from "graphql-type-json";
 
 const AWSModule = new GraphQLModule<Config>({
-  imports: [AuthModule],
   typeDefs: gql`
     scalar JSONObject
 
