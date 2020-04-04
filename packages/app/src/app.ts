@@ -5,18 +5,29 @@ import DatabaseModule from "db";
 import AuthModule from "auth-module";
 import AWSModule from "aws-module";
 import UserModule from "user-module";
-import {
-  DATABASE_URL,
-  AWS_USER,
-  AWS_PASSWORD,
-  AWS_S3_BUCKET,
-  GOOGLE_AUTH_ID,
-  GOOGLE_AUTH_SECRET,
-  GOOGLE_AUTH_CALLBACK
-} from "./env";
 
-export const App = new GraphQLModule({
-  imports: [
+interface Config {
+  DATABASE_URL: string;
+  AWS_USER: string;
+  AWS_PASSWORD: string;
+  AWS_S3_BUCKET: string;
+  GOOGLE_AUTH_ID: string;
+  GOOGLE_AUTH_SECRET: string;
+  GOOGLE_AUTH_CALLBACK: string;
+}
+
+export const App = new GraphQLModule<Config>({
+  imports: ({
+    config: {
+      DATABASE_URL,
+      AWS_USER,
+      AWS_PASSWORD,
+      AWS_S3_BUCKET,
+      GOOGLE_AUTH_ID,
+      GOOGLE_AUTH_SECRET,
+      GOOGLE_AUTH_CALLBACK
+    }
+  }) => [
     DocumentModule,
     DatabaseModule.forRoot({ DB_URL: DATABASE_URL }),
     AWSModule.forRoot({

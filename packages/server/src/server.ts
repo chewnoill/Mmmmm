@@ -3,8 +3,15 @@ import {
   CLIENT_BASE_URL,
   SERVER_PORT,
   SERVER_GRAPHQL_ENDPOINT,
-  SERVER_BASE_URL
-} from "env";
+  SERVER_BASE_URL,
+  DATABASE_URL,
+  AWS_USER,
+  AWS_PASSWORD,
+  AWS_S3_BUCKET,
+  GOOGLE_AUTH_ID,
+  GOOGLE_AUTH_SECRET,
+  GOOGLE_AUTH_CALLBACK
+} from "./env";
 
 import * as Hapi from "@hapi/hapi";
 import { makeExecutableSchema } from "graphql-tools";
@@ -17,7 +24,15 @@ async function StartServer() {
     uri: SERVER_BASE_URL
   });
 
-  const { typeDefs, resolvers, schemaDirectives, context } = App.forRoot({});
+  const { typeDefs, resolvers, schemaDirectives, context } = App.forRoot({
+    DATABASE_URL,
+    AWS_USER,
+    AWS_PASSWORD,
+    AWS_S3_BUCKET,
+    GOOGLE_AUTH_ID,
+    GOOGLE_AUTH_SECRET,
+    GOOGLE_AUTH_CALLBACK
+  });
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,

@@ -17,6 +17,7 @@
     }
   },
   "scripts": {
+    "app": "cd packages/app && yarn",
     "client": "cd packages/client && yarn",
     "codegen": "yarn auth codegen && yarn user codegen && cd packages/codegen && yarn build",
     "db": "cd packages/db && yarn",
