@@ -20,6 +20,7 @@
     "app": "cd packages/app && yarn",
     "client": "cd packages/client && yarn",
     "codegen": "yarn auth codegen && yarn user codegen && cd packages/codegen && yarn build",
+    "build": "yarn codegen && yarn client build && yarn server build",
     "db": "cd packages/db && yarn",
     "docs": "cd packages/docs && yarn",
     "shared": "cd packages/shared && yarn",

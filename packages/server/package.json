@@ -4,7 +4,9 @@
   "license": "MIT",
   "main": "src/server.ts",
   "scripts": {
-    "start": "ts-node-dev -r tsconfig-paths/register src/server.ts"
+    "start": "ts-node-dev -r tsconfig-paths/register src/server.ts",
+    "start:prod": "node build/server.js",
+    "build": "webpack"
   },
   "dependencies": {
     "@graphql-modules/core": "^0.7.10",
@@ -24,6 +26,7 @@
     "typescript": "^3.5.2"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.4"
+    "@types/node-fetch": "^2.5.4",
+    "webpack-cli": "^3.3.11"
   }
 }
