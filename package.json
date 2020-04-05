@@ -30,6 +30,7 @@
     "user": "cd packages/user-module && yarn",
     "document-module": "cd packages/document-module && yarn",
     "format": "prettier '**/*.{ts,tsx,json,graphql}' --write",
+    "format:check": "prettier '**/*.{ts,tsx,json,graphql}' --check",
     "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts' '*.tsx' '*.graphql'"
   }
 }
