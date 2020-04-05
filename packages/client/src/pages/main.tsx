@@ -1,6 +1,5 @@
 import React from "react";
 import { useGetMyProfileQuery } from "codegen";
-import DropZone from "components/drop-zone";
 import { Link } from "react-router-dom";
 
 export default () => {

@@ -17,8 +17,10 @@
     }
   },
   "scripts": {
+    "app": "cd packages/app && yarn",
     "client": "cd packages/client && yarn",
-    "codegen": "yarn auth codegen && yarn user codegen && cd packages/codegen && yarn build",
+    "codegen": "yarn document-module codegen && yarn auth codegen && yarn user codegen && cd packages/codegen && yarn build",
+    "build": "yarn shared build && yarn codegen && yarn client build && yarn server build",
     "db": "cd packages/db && yarn",
     "docs": "cd packages/docs && yarn",
     "shared": "cd packages/shared && yarn",
@@ -28,6 +30,7 @@
     "user": "cd packages/user-module && yarn",
     "document-module": "cd packages/document-module && yarn",
     "format": "prettier '**/*.{ts,tsx,json,graphql}' --write",
+    "format:check": "prettier '**/*.{ts,tsx,json,graphql}' --check",
     "format:staged": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.json' '*.ts' '*.tsx' '*.graphql'"
   }
 }
