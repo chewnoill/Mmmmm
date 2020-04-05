@@ -1,7 +1,6 @@
 import React from "react";
 import { ApolloProvider } from "react-apollo";
 import { useApolloClient } from "utils/apollo-client";
-import Document from "components/document";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "pages/login";
 import OAuthConsumer from "pages/oauth-consumer";

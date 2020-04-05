@@ -18,7 +18,7 @@ const CollectionView = () => {
       <DropZone collectionId={id}>
         name: {name}
         {things.edges.map(({ edge: { id, s3url } }) => (
-          <img key={id} src={s3url!} />
+          <img alt={id} key={id} src={s3url!} />
         ))}
       </DropZone>
     </div>
