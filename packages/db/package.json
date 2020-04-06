@@ -11,6 +11,9 @@
     "@graphql-codegen/typescript-resolvers": "^1.9.1",
     "reflect-metadata": "^0.1.13"
   },
+  "optionalDependencies": {
+    "pg-native": "^3.0.0"
+  },
   "dependencies": {
     "@graphql-modules/core": "^0.7.10",
     "@types/ramda": "^0.26.40",
@@ -19,7 +22,6 @@
     "graphql": "14.5.4",
     "graphql-tag": "^2.10.1",
     "pg": "^7.18.1",
-    "pg-native": "^3.0.0",
     "ramda": "^0.27.0",
     "shared": "1.0.0",
     "typeorm": "^0.2.22",
