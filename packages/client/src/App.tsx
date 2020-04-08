@@ -1,4 +1,6 @@
 import React from "react";
+import { Global } from "@emotion/core";
+import "tachyons";
 import { ApolloProvider } from "react-apollo";
 import { useApolloClient } from "utils/apollo-client";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -6,7 +8,9 @@ import Login from "pages/login";
 import OAuthConsumer from "pages/oauth-consumer";
 import Main from "pages/main";
 import Collection from "pages/collection";
+import StyleGuide from "pages/styleguide";
 import { useLocalStorage } from "hooks/use-local-storage";
+import { Page } from "ui";
 
 const App: React.FC = () => {
   const [auth] = useLocalStorage();
@@ -25,6 +29,9 @@ const App: React.FC = () => {
           <Route path="/collection/:id">
             <Collection />
           </Route>
+          <Route path="/styleguide">
+            <StyleGuide />
+          </Route>
           <Route path="/">
             <Main />
           </Route>
@@ -34,4 +41,17 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default () => (
+  <>
+    <Global
+      styles={{
+        body: {
+          margin: 0
+        }
+      }}
+    />
+    <Page>
+      <App />
+    </Page>
+  </>
+);
