@@ -69,18 +69,13 @@ export class UserProvider {
       .leftJoin("collection.users", "user")
       .getOne();
   }
-  getUserCollectionThing(
-    userId: string,
-    collectionId: string,
-    thingId: string
-  ) {
+  getUserCollectionThing(userId: string, thingId: string) {
     return this.connection.manager
       .createQueryBuilder()
       .select("thing")
       .from(Thing, "thing")
       .where("thing.id = :thingId", { thingId })
       .andWhere("user.id = :userId", { userId })
-      .andWhere("collection.id = :collectionId", { collectionId })
       .leftJoin("thing.collection", "collection")
       .leftJoin("collection.users", "user")
       .getOne();
