@@ -9,8 +9,8 @@ import { mapIds } from "../utils";
 @Injectable({ scope: ProviderScope.Session })
 export class UserProvider {
   connection: Connection;
-  userLoader: DataLoader<string, User>;
-  userCollectionLoader: DataLoader<string, Collection[]>;
+  userLoader: DataLoader<string, User | undefined>;
+  userCollectionLoader: DataLoader<string, Collection[] | undefined>;
   constructor() {
     this.connection = getConnection();
     this.userLoader = new DataLoader(ids =>
@@ -31,12 +31,14 @@ export class UserProvider {
         .leftJoinAndSelect("user.collections", "collection")
         .getMany()
         .then(mapIds(ids))
-        .then(users => users.map(user => user.collections))
+        .then(users => users.map(user => user && user.collections))
     );
   }
 
   getUser(id: string) {
-    return this.userLoader.load(id);
+    const user = this.userLoader.load(id);
+    if (!user) throw Error("user not found");
+    return user;
   }
 
   getUserByEmail(email: string) {
@@ -87,8 +89,8 @@ export class UserProvider {
 @Injectable({ scope: ProviderScope.Session })
 export class CollectionProvider {
   connection: Connection;
-  collectionLoader: DataLoader<string, Collection>;
-  collectionThingLoader: DataLoader<string, Thing[]>;
+  collectionLoader: DataLoader<string, Collection | undefined>;
+  collectionThingLoader: DataLoader<string, Thing[] | undefined>;
   constructor() {
     this.connection = getConnection();
     this.collectionLoader = new DataLoader(ids =>
@@ -109,7 +111,9 @@ export class CollectionProvider {
         .leftJoinAndSelect("collection.things", "thing")
         .getMany()
         .then(mapIds(ids))
-        .then(collections => collections.map(collection => collection.things))
+        .then(collections =>
+          collections.map(collection => collection && collection.things)
+        )
     );
   }
 
@@ -135,7 +139,7 @@ export class CollectionProvider {
 @Injectable({ scope: ProviderScope.Session })
 export class ThingProvider {
   connection: Connection;
-  thingLoader: DataLoader<string, Thing>;
+  thingLoader: DataLoader<string, Thing | undefined>;
   constructor() {
     this.connection = getConnection();
     this.thingLoader = new DataLoader(ids =>
@@ -150,7 +154,10 @@ export class ThingProvider {
   }
 
   getThing(id: string) {
-    return this.thingLoader.load(id);
+    const thing = this.thingLoader.load(id);
+
+    if (!thing) throw Error("not found");
+    return thing;
   }
 
   getThings(ids: string[]) {
