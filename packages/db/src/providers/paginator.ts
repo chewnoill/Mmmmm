@@ -1,5 +1,5 @@
 import { Collection } from "../entities/collection";
-import { Thing } from "../entities/thing";
+import { Thing, ThingType } from "../entities/thing";
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import { getConnection, Connection as dbConnection } from "../typeorm";
 import { SelectQueryBuilder } from "typeorm";
@@ -66,6 +66,17 @@ export class PaginationProvider {
   connection: dbConnection;
   constructor() {
     this.connection = getConnection();
+  }
+
+  paginateCollectionTextThings(collectionId: string, args?: PageArgs) {
+    const query = this.connection.manager
+      .createQueryBuilder()
+      .select("thing.id")
+      .from(Thing, "thing")
+      .where("collection.id = :id", { id: collectionId })
+      .andWhere("thing.type = :thingType", { thingType: ThingType.TEXT })
+      .leftJoin("thing.collection", "collection");
+    return paginate(query, args);
   }
 
   paginateCollectionThings(collectionId: string, args?: PageArgs) {
