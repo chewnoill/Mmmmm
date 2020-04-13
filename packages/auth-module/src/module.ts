@@ -4,10 +4,9 @@ import gql from "graphql-tag";
 import { GoogleProvider } from "./providers";
 import { Config, Context } from "./types";
 import { AuthenticatedDirective } from "./directive";
-import { Request } from "@hapi/hapi";
 
 export interface Session {
-  req: Request;
+  req: any; //Hapi.Request
 }
 
 const AuthModule = new GraphQLModule<Config, Session, ModuleContext<Context>>({
