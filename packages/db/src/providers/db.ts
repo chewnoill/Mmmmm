@@ -1,5 +1,5 @@
 import { User } from "../entities/user";
-import { Thing } from "../entities/thing";
+import { Thing, ThingType } from "../entities/thing";
 import { Collection } from "../entities/collection";
 import { Injectable, ProviderScope } from "@graphql-modules/di";
 import * as DataLoader from "dataloader";
@@ -157,9 +157,17 @@ export class ThingProvider {
     return this.thingLoader.loadMany(ids);
   }
 
-  createThing(collection: Collection, value: string) {
+  createThing(collection: Collection, value: string, type: ThingType) {
     const thing = new Thing();
     thing.collection = collection;
+    thing.type = type;
+    thing.value = value;
+    return this.connection.manager.save(thing);
+  }
+
+  async updateThing(id: string, value: string) {
+    const thing = await this.getThing(id);
+    if (!thing) throw Error("not found");
     thing.value = value;
     return this.connection.manager.save(thing);
   }

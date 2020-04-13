@@ -6,7 +6,8 @@ import DatabaseModule, {
   Collection,
   CollectionProvider,
   Thing,
-  ThingProvider
+  ThingProvider,
+  ThingType
 } from "db";
 import AuthModule, { GoogleProvider } from "auth-module";
 import AWSModule, { AWSProvider } from "aws-module";
@@ -18,16 +19,18 @@ const Module = new GraphQLModule({
       me: Me! @auth
     }
 
-    type Me {
-      collection(id: ID!): Collection
+    type ImageThing {
+      s3url: String!
+      mimeType: String!
     }
 
-    type Thing {
-      s3url: String
+    type Me {
+      collection(id: ID!): Collection
+      thing(id: ID!): Thing
     }
 
     type Mutation {
-      me: MeMutations
+      me: MeMutations @auth
     }
 
     input CreateCollectionInput {
@@ -36,16 +39,23 @@ const Module = new GraphQLModule({
 
     type MeMutations {
       createCollection(input: CreateCollectionInput): Collection
-      collection(id: ID!): UpdateCollection
+      collection(id: ID!): UpdateCollectionMutations
     }
 
-    type UpdateCollection {
-      createThing(name: String!): CreateThingResponse
+    type UpdateCollectionMutations {
+      uploadFile(mimeType: String!): UploadFileResponse!
+      createThing(value: String!): Thing!
+      updateThing(args: UpdateTextThingInput): Thing!
     }
 
-    type CreateThingResponse {
-      thing: Thing!
-      createPresignedPost: AWSPresignedURL!
+    type UploadFileResponse {
+      presignedPost: AWSPresignedURL!
+      id: ID!
+    }
+
+    input UpdateTextThingInput {
+      id: ID!
+      value: String!
     }
   `,
   resolvers: {
@@ -62,11 +72,19 @@ const Module = new GraphQLModule({
           .getUserCollection(
             injector.get(GoogleProvider).authorizeSession().id,
             id
+          ),
+      thing: (_, { id }, { injector }) =>
+        injector
+          .get(UserProvider)
+          .getUserCollectionThing(
+            injector.get(GoogleProvider).authorizeSession().id,
+            id
           )
     },
-    Thing: {
+    ImageThing: {
       s3url: (thing: Thing, _, { injector }) =>
-        injector.get(AWSProvider).getPresignedGet(thing.id)
+        injector.get(AWSProvider).getPresignedGet(thing.id),
+      mimeType: (thing: Thing, _, { injector }) => thing.value
     },
     MeMutations: {
       createCollection: async (_, { input: { name } }, { injector }) =>
@@ -79,17 +97,28 @@ const Module = new GraphQLModule({
       collection: (_, { id }, { injector }) =>
         injector.get(CollectionProvider).getCollection(id)
     },
-    UpdateCollection: {
-      createThing: (collection: Collection, { name }, { injector }) =>
-        injector.get(ThingProvider).createThing(collection, name)
-    },
-    CreateThingResponse: {
-      thing: (thing: Thing) => thing,
-      createPresignedPost: (thing: Thing, _, { injector }) =>
-        injector.get(AWSProvider).getPresignedPost(thing.id)
+    UpdateCollectionMutations: {
+      uploadFile: async (
+        collection: Collection,
+        { mimeType },
+        { injector }
+      ) => {
+        const thing = await injector
+          .get(ThingProvider)
+          .createThing(collection, mimeType, ThingType.IMAGE_LINK);
+        return {
+          id: thing.id,
+          presignedPost: injector.get(AWSProvider).getPresignedPost(thing.id)
+        };
+      },
+      createThing: (collection: Collection, { value }, { injector }) =>
+        injector.get(ThingProvider).createThing(collection, value),
+      updateThing: (_, { args }, { injector }) =>
+        injector.get(ThingProvider).updateThing(args.id, args.value)
     },
     ...resolvers
-  }
+  },
+  providers: []
 });
 
 export default Module;

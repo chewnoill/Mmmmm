@@ -54,7 +54,7 @@ export const PaginationModule = new GraphQLModule({
     },
     Collection: {
       things: ({ id }, { args }, { injector }) =>
-        injector.get(PaginationProvider).paginateCollectionThings(id, args)
+        injector.get(PaginationProvider).paginateCollectionTextThings(id, args)
     }
   },
   providers: [PaginationProvider]
