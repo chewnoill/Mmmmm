@@ -29,7 +29,7 @@ export class AWSProvider {
       Expires: 60,
       Fields: { key },
       Conditions: [
-        ["starts-with", "$Content-Type", "image/"],
+        ["starts-with", "$Content-Type", ""],
         ["content-length-range", 0, 10485760],
         { success_action_status: "201" }
       ]
