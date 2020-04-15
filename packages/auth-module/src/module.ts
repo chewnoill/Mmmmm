@@ -4,13 +4,18 @@ import gql from "graphql-tag";
 import { GoogleProvider } from "./providers";
 import { Config, Context } from "./types";
 import { AuthenticatedDirective } from "./directive";
+import { setupGoogleClient } from "./google";
 
 export interface Session {
   req: any; //Hapi.Request
 }
 
 const AuthModule = new GraphQLModule<Config, Session, ModuleContext<Context>>({
-  imports: [DatabaseModule],
+  name: "auth-module",
+  imports: ({ config }) => {
+    setupGoogleClient(config);
+    return [DatabaseModule];
+  },
   typeDefs: gql`
     directive @auth on FIELD_DEFINITION
 
@@ -49,13 +54,10 @@ const AuthModule = new GraphQLModule<Config, Session, ModuleContext<Context>>({
     AuthQuery: {
       login_url: (_, __, { injector }) =>
         injector.get(GoogleProvider).getAuthURL(),
-      me: (_, __, { injector }) => ({
-        user: injector.get(GoogleProvider).getUser()
-      })
+      me: () => ({})
     },
     Me: {
-      user: (_, __, { injector }) =>
-        injector.get(GoogleProvider).authorizeSession()
+      user: (_, __, { user }) => user
     },
     AuthMutation: {
       login: (_, { code }, { injector }) =>

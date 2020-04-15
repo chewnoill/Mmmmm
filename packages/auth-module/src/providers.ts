@@ -1,27 +1,15 @@
 import { Injectable, ProviderScope } from "@graphql-modules/di";
-import { ModuleSessionInfo } from "@graphql-modules/core";
 import { google } from "googleapis";
 import { OAuth2Client } from "googleapis-common";
-import { Config, Context } from "./types";
 import { User, UserProvider } from "db";
+import { getGoogleClient } from "./google";
 
 @Injectable({ scope: ProviderScope.Session })
 export class GoogleProvider {
   _client: OAuth2Client;
-  _user?: User;
 
-  constructor(private userProvider: UserProvider) {}
-
-  async onRequest(session: ModuleSessionInfo<Config, {}, Context>) {
-    this._client = new google.auth.OAuth2(
-      session.config.googleAuthId,
-      session.config.googleAuthSecret,
-      session.config.googleAuthCallback
-    );
-    this._user = session.context.user;
-    if (this._user && this._user.refresh_token) {
-      this._client.setCredentials({ refresh_token: this._user.refresh_token });
-    }
+  constructor(private userProvider: UserProvider) {
+    this._client = getGoogleClient();
   }
 
   getFromAuth(bearerAuth?: string) {
@@ -31,13 +19,10 @@ export class GoogleProvider {
     return this.userProvider.getUser(auth);
   }
 
-  authorizeSession() {
-    if (!this._user) throw Error("unauthorized");
-    return this._user;
-  }
-
-  getUser() {
-    return this._user;
+  authorizeClient(user: User) {
+    if (user.refresh_token) {
+      this._client.setCredentials({ refresh_token: user.refresh_token });
+    }
   }
 
   getAuthURL() {
