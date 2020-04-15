@@ -1,4 +1,4 @@
-import { GraphQLModule } from "@graphql-modules/core";
+import { GraphQLModule, ModuleContext } from "@graphql-modules/core";
 import gql from "graphql-tag";
 import resolvers from "./resolvers";
 import DatabaseModule, {
@@ -7,12 +7,17 @@ import DatabaseModule, {
   CollectionProvider,
   Thing,
   ThingProvider,
-  ThingType
+  ThingType,
+  User
 } from "db";
-import AuthModule, { GoogleProvider } from "auth-module";
+import AuthModule from "auth-module";
 import AWSModule, { AWSProvider } from "aws-module";
 
-const Module = new GraphQLModule({
+const Module = new GraphQLModule<
+  {},
+  { req: any },
+  ModuleContext<{ user: User }>
+>({
   imports: [DatabaseModule, AuthModule, AWSModule],
   typeDefs: gql`
     type Query {
@@ -66,20 +71,10 @@ const Module = new GraphQLModule({
       me: () => ({})
     },
     Me: {
-      collection: (_, { id }, { injector }) =>
-        injector
-          .get(UserProvider)
-          .getUserCollection(
-            injector.get(GoogleProvider).authorizeSession().id,
-            id
-          ),
-      thing: (_, { id }, { injector }) =>
-        injector
-          .get(UserProvider)
-          .getUserCollectionThing(
-            injector.get(GoogleProvider).authorizeSession().id,
-            id
-          )
+      collection: (_, { id }, { injector, user }) =>
+        injector.get(UserProvider).getUserCollection(user.id, id),
+      thing: (_, { id }, { injector, user }) =>
+        injector.get(UserProvider).getUserCollectionThing(user.id, id)
     },
     ImageThing: {
       s3url: (thing: Thing, _, { injector }) =>
@@ -87,13 +82,8 @@ const Module = new GraphQLModule({
       mimeType: (thing: Thing, _, { injector }) => thing.value
     },
     MeMutations: {
-      createCollection: async (_, { input: { name } }, { injector }) =>
-        injector
-          .get(CollectionProvider)
-          .createCollection(
-            injector.get(GoogleProvider).authorizeSession(),
-            name
-          ),
+      createCollection: async (_, { input: { name } }, { injector, user }) =>
+        injector.get(CollectionProvider).createCollection(user, name),
       collection: (_, { id }, { injector }) =>
         injector.get(CollectionProvider).getCollection(id)
     },
@@ -112,7 +102,9 @@ const Module = new GraphQLModule({
         };
       },
       createThing: (collection: Collection, { value }, { injector }) =>
-        injector.get(ThingProvider).createThing(collection, value),
+        injector
+          .get(ThingProvider)
+          .createThing(collection, value, ThingType.TEXT),
       updateThing: (_, { args }, { injector }) =>
         injector.get(ThingProvider).updateThing(args.id, args.value)
     },
