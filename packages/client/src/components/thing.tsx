@@ -4,15 +4,6 @@ import MdxComponent from "components/mdx-component";
 import { ThingFragmentFragment, useGetMyThingQuery } from "codegen";
 import { ThingProvider, ThingWrapper } from "components/thing-wrapper";
 
-const ThingImg = ({ id, className }: { id: string; className: string }) => {
-  const { data } = useGetMyThingQuery({ variables: { thingId: id } });
-  if (data?.me?.thing?.__typename === "ImageThing") {
-    const { s3url } = data.me.thing;
-    return <img className={className} alt="thing" src={s3url} />;
-  }
-  return null;
-};
-
 const StyledIframe = styled.iframe`
   height: 100vh;
   width: 100%;
@@ -20,16 +11,28 @@ const StyledIframe = styled.iframe`
   overflow: hidden;
 `;
 
-const ThingPDF = ({ id, className }: { id: string; className: string }) => {
+const S3Thing = ({
+  id,
+  className,
+  fileName = "alt"
+}: {
+  id: string;
+  className: string;
+  fileName?: string;
+}) => {
   const { data } = useGetMyThingQuery({ variables: { thingId: id } });
   if (data?.me?.thing?.__typename === "ImageThing") {
-    const { s3url } = data.me.thing;
-    return (
-      <StyledIframe
-        className={className}
-        src={`${s3url}#view=Fit&scrollbar=0&statusbar=0`}
-      />
-    );
+    const { s3url, mimeType } = data.me.thing;
+    if (mimeType.startsWith("image/")) {
+      return <img className={className} alt={fileName} src={s3url} />;
+    } else if (mimeType.startsWith("application/pdf")) {
+      return (
+        <StyledIframe
+          className={className}
+          src={`${s3url}#view=Fit&scrollbar=0&statusbar=0`}
+        />
+      );
+    }
   }
   return null;
 };
@@ -54,8 +57,7 @@ const ThingView = ({
           </ThingWrapper>
         }
         components={{
-          Img: ThingImg,
-          Pdf: ThingPDF,
+          S3Thing,
           wrapper: ThingWrapper,
           styled
         }}
