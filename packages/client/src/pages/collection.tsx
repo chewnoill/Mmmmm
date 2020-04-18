@@ -36,6 +36,7 @@ const Page = styled(Div)`
     left: 0;
     z-index: 1;
     background: white;
+    margin-bottom: 10px;
 
     h1 {
       margin: 0;
