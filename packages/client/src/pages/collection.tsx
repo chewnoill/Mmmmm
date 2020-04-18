@@ -2,7 +2,11 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import { useParams } from "react-router-dom";
-import { useGetMyCollectionQuery } from "codegen";
+import {
+  useGetMyCollectionQuery,
+  useCreateThingMutation,
+  GetMyCollectionDocument
+} from "codegen";
 import ThingView from "components/thing";
 import { Div } from "ui";
 import {
@@ -44,6 +48,7 @@ const CollectionView = () => {
   const { data } = useGetMyCollectionQuery({
     variables: { collectionId: id! }
   });
+  const [createThing] = useCreateThingMutation();
 
   if (!data || !data.me || !data.me.collection || !id) return null;
   const { name, things } = data.me.collection;
@@ -52,6 +57,24 @@ const CollectionView = () => {
     <Page>
       <div className="menu">
         <h1 className="heading">name: {name}</h1>
+        <button
+          onClick={() =>
+            createThing({
+              variables: {
+                collectionId: id,
+                value: "# New Thing"
+              },
+              refetchQueries: [
+                {
+                  query: GetMyCollectionDocument,
+                  variables: { collectionId: id }
+                }
+              ]
+            })
+          }
+        >
+          create thing
+        </button>
       </div>
       <div className="collection">
         {things.edges.map(({ edge }) => (
