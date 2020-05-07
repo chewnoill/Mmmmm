@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "pages/login";
 import OAuthConsumer from "pages/oauth-consumer";
 import Main from "pages/main";
+import EditCollection from "pages/edit-collection";
 import Collection from "pages/collection";
 import StyleGuide from "pages/styleguide";
 import { useLocalStorage } from "hooks/use-local-storage";
@@ -25,6 +26,9 @@ const App: React.FC = () => {
           </Route>
           <Route path="/oauth_consumer">
             <OAuthConsumer />
+          </Route>
+          <Route path="/collection/:id/edit">
+            <EditCollection />
           </Route>
           <Route path="/collection/:id">
             <Collection />
