@@ -14,3 +14,4 @@ export const AWS_S3_BUCKET = process.env.AWS_S3_BUCKET!;
 export const GOOGLE_AUTH_ID = process.env.GOOGLE_AUTH_ID!;
 export const GOOGLE_AUTH_SECRET = process.env.GOOGLE_AUTH_SECRET!;
 export const GOOGLE_AUTH_CALLBACK = process.env.GOOGLE_AUTH_CALLBACK!;
+export const MOCK = process.env.MOCK === "true";
