@@ -13,6 +13,7 @@ import {
   CollectionFlowProvider,
   useSelectedCollectionId
 } from "context/collection-flow";
+import { Link } from "react-router-dom";
 
 const gridCollection = css`
   width: 100%;
@@ -76,6 +77,7 @@ const CollectionView = () => {
         >
           create thing
         </button>
+        <Link to={`/collection/${id}/edit`}>edit collection settings</Link>
       </div>
       <div className="collection">
         {things.edges.map(({ edge }) => (

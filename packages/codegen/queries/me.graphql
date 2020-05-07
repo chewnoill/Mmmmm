@@ -74,6 +74,15 @@ mutation uploadFileToCollection($collectionId: ID!, $mimeType: String!) {
   }
 }
 
+mutation updateCollection($collectionId: ID!, $name: String!) {
+  me {
+    collection(id: $collectionId) {
+      update(args: { name: $name }) {
+        ...CollectionFragment
+      }
+    }
+  }
+}
 mutation updateThing($collectionId: ID!, $thingId: ID!, $value: String!) {
   me {
     collection(id: $collectionId) {
