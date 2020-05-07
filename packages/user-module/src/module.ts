@@ -51,11 +51,16 @@ const Module = new GraphQLModule<
       uploadFile(mimeType: String!): UploadFileResponse!
       createThing(value: String!): Thing!
       updateThing(args: UpdateTextThingInput): Thing!
+      update(args: UpdateCollectionInput): Collection!
     }
 
     type UploadFileResponse {
       presignedPost: AWSPresignedURL!
       id: ID!
+    }
+
+    input UpdateCollectionInput {
+      name: String!
     }
 
     input UpdateTextThingInput {
@@ -106,7 +111,9 @@ const Module = new GraphQLModule<
           .get(ThingProvider)
           .createThing(collection, value, ThingType.TEXT),
       updateThing: (_, { args }, { injector }) =>
-        injector.get(ThingProvider).updateThing(args.id, args.value)
+        injector.get(ThingProvider).updateThing(args.id, args.value),
+      update: (collection: Collection, { args }, { injector }) =>
+        injector.get(CollectionProvider).updateCollection(collection, args)
     },
     ...resolvers
   },
