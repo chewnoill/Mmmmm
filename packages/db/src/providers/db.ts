@@ -123,6 +123,11 @@ export class CollectionProvider {
     return this.collectionThingLoader.load(id);
   }
 
+  updateCollection(collection: Collection, { name }: { name: string }) {
+    collection.name = name;
+    return this.connection.manager.save(collection);
+  }
+
   async createCollection(user: User, name: string) {
     const collection = new Collection();
     collection.name = name;
