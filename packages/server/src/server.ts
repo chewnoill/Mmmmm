@@ -10,13 +10,15 @@ import {
   AWS_S3_BUCKET,
   GOOGLE_AUTH_ID,
   GOOGLE_AUTH_SECRET,
-  GOOGLE_AUTH_CALLBACK
+  GOOGLE_AUTH_CALLBACK,
+  MOCK
 } from "./env";
 
 import * as Hapi from "@hapi/hapi";
 import { makeExecutableSchema } from "graphql-tools";
 import { ApolloServer } from "apollo-server-hapi";
 import { App } from "app";
+import { mockData } from "./mock-data";
 
 async function StartServer() {
   const app = new Hapi.Server({
@@ -42,6 +44,7 @@ async function StartServer() {
 
   const server = new ApolloServer({
     schema,
+    mocks: MOCK && mockData,
     playground: true,
     context: ({ request, h, ...rest }) =>
       context({
