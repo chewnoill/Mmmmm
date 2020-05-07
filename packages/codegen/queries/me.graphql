@@ -18,8 +18,7 @@ query getMyProfile {
 query getMyCollection($collectionId: ID!) {
   me {
     collection(id: $collectionId) {
-      id
-      name
+      ...CollectionFragment
       things(args: { first: 100 }) {
         edges {
           edge {
@@ -47,7 +46,7 @@ query getMyThing($thingId: ID!) {
 mutation createCollection($name: String!) {
   me {
     createCollection(input: { name: $name }) {
-      id
+      ...CollectionFragment
     }
   }
 }
@@ -83,6 +82,11 @@ mutation updateThing($collectionId: ID!, $thingId: ID!, $value: String!) {
       }
     }
   }
+}
+
+fragment CollectionFragment on Collection {
+  id
+  name
 }
 
 fragment ThingFragment on Thing {
