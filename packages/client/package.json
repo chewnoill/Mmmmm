@@ -22,7 +22,7 @@
     "apollo-link-ws": "^1.0.19",
     "axios": "^0.19.2",
     "codegen": "1.0.0",
-    "codemirror": "^5.52.0",
+    "codemirror": "^5.58.2",
     "formik": "^2.1.4",
     "query-string": "^6.11.0",
     "react": "^16.12.0",
