@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@graphql-modules/core": "^0.7.10",
-    "apollo-server": "^2.14.2",
+    "apollo-server": "^2.25.4",
     "graphql": "14.5.4",
     "graphql-tag": "^2.10.1",
     "shared": "1.0.0",
